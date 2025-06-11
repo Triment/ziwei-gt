@@ -30,7 +30,7 @@ interface Palace {
   duty?: string;//本命宫位职责
 }
 
-enum FateNum {
+export enum FateNum {
   Water = 2,
   Wood = 3,
   Gold = 4,
@@ -66,7 +66,7 @@ export class Plate {
       })
     });//初始化宫位
     //定12宫干
-    let position = GlobalStem.indexOf(positionStem( yearStem )!);//起宫干的索引 
+    let position = GlobalStem.indexOf(positionStem( yearStem )!);//起宫干的索引
     for ( let i = 0; i < 12; i++ ) {
       this._palaces[(i+3)%12].stemBranch.stem = GlobalStem[position%10];//卯宫开始安宫干
       position++;
@@ -84,6 +84,9 @@ export class Plate {
     for ( let i = 12; i > 1; i-- ) {
       this._palaces[(i+mainIndex)%12].duty = GLOBAL_DUTYS[12-i];
     }
+
+    //掌心决定五行局
+    this.fateType = deterMine(this._palaces[mainIndex].stemBranch);
   }
 
   //获取宫位
@@ -92,10 +95,33 @@ export class Plate {
   }
 }
 
+//掌心决定五行局
+function deterMine( stemBranch: StemBranch ): FateNum {
+  let fiveElements = [FateNum.Gold, FateNum.Water, FateNum.Fire, FateNum.Soil, FateNum.Wood];
+  let i = 0;
+  for (let stem of ['甲乙', '丙丁', '戊己', '庚辛', '壬癸']){
+    if(stem.includes(stemBranch.stem)){
+      //三个连续定点数地支
+      let threeElements = [];
+      for (let j = 0; j < 3; j++){
+        threeElements.push(fiveElements[(i+j)%5]);
+      }
+      let k = 0;
+      for (let branch of ['子丑', '寅卯', '辰巳', '午未', '申酉', '戌亥']){
+        if(branch.includes(stemBranch.branch)){
+          return threeElements[k%3];
+        }
+        k++;
+      }
+    }
+    i++;
+  }
+  return FateNum.Soil;
+}
 
 //函数用于定位十二宫干
 function positionStem( yearStem: string ): string | undefined {
-  const _stems = [ '丁', '己', '庚', '辛', '乙' ];
+  const _stems = [ '丁', '己', '辛', '癸','乙' ];
   for ( let i = 0; i < 5; i++ ) {
     if ([GlobalStem[i], GlobalStem[i + 5]].includes( yearStem )) {
       return _stems[i];
