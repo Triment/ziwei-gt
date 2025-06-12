@@ -1,3 +1,5 @@
+import { Star } from './Atom/Star'
+import {SolarDay, SolarTime} from 'tyme4ts';
 const GlobalBranch = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 const GlobalStem = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
 
@@ -15,7 +17,15 @@ const GLOBAL_DUTYS = [
   '福德',
   '父母'
 ]
-
+// 生日
+export type Birthday = {
+  year: number;
+  month: number;
+  day: number;
+  hour: number;
+  minute: number;
+  second: number;
+}
 // 干支
 type StemBranch = {
   stem: string;
@@ -28,6 +38,7 @@ interface Palace {
   isBody?: boolean;//是否为身宫
   isOrigin?: boolean;//是否为来因宫
   duty?: string;//本命宫位职责
+  
 }
 
 export enum FateNum {
@@ -37,8 +48,6 @@ export enum FateNum {
   Soil = 5,
   Fire = 6
 }
-//八字
-export type Character = StemBranch[]
 
 export class Plate {
   // 命局
@@ -52,10 +61,17 @@ export class Plate {
   private _palaces: Palace[] = [];//宫位
   public yinYang: boolean = false;//阴阳
   public fateType: FateNum = FateNum.Soil;//命数,命局
-  constructor( character: Character ) {
-    let yearStem = character[0].stem;//年干
-    let monthlyBranch = character[1].branch;//月支
-    let hourBranch = character[3].branch;//时支
+  constructor( birthday: Birthday ) {
+    //获取农历时间
+    let solar = SolarTime.fromYmdHms( birthday.year, birthday.month, birthday.day, birthday.hour, birthday.minute, birthday.second );
+    let lunar = solar.getLunarHour();
+
+    //获取八字
+    let eightChar = lunar.getEightChar();
+
+    let yearStem = eightChar.getYear().getHeavenStem().toString();//年干
+    let monthlyBranch = eightChar.getMonth().getEarthBranch().toString();//月支
+    let hourBranch = eightChar.getHour().getEarthBranch().toString();//时支
     GlobalBranch.forEach( ( branch, _index ) => {
       this._palaces.push( {
         stemBranch: {
@@ -92,6 +108,10 @@ export class Plate {
   //获取宫位
   public getPalaces(): Palace[] {
     return this._palaces;
+  }
+
+  public setZiweiStar() {
+    
   }
 }
 

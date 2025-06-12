@@ -1,45 +1,25 @@
 import { describe, it, expect } from 'vitest';
-import { Plate, Character, FateNum } from './index'
+import { Plate, FateNum, Birthday } from './index'
 describe('宫位测试', () => {
-    const character: Character = [
-        {
-            stem: '乙',
-            branch: '亥'
-        },
-        {
-            stem: '丁',
-            branch: '亥'
-        },
-        {
-            stem: '戊',
-            branch: '辰'
-        },
-        {
-            stem: '戊',
-            branch: '午'
-        }
-    ];
-    let plate = new Plate(character);
+    const birthday: Birthday = {
+        year: 1995,
+        month: 12,
+        day: 3,
+        hour: 12,
+        minute: 45,
+        second: 0
+    };
+    let plate = new Plate(birthday);
     //另起一个盘
-    const character2: Character = [
-        {
-            stem: '丁',
-            branch: '丑'
-        },
-        {
-            stem: '辛',
-            branch: '亥'
-        },
-        {
-            stem: '壬',
-            branch: '戌'
-        },
-        {
-            stem: '癸',
-            branch: '卯'
-        }
-    ];
-    let plate2 = new Plate(character2);
+    const birthday2: Birthday = {
+        year: 1997,
+        month: 11,
+        day: 16,
+        hour: 5,
+        minute: 44,
+        second: 0
+    };
+    let plate2 = new Plate(birthday2);
     it('八字安宫', () => {
         expect(plate.getPalaces()[0].stemBranch.stem).toBe('戊');
         expect(plate.getPalaces()[0].stemBranch.branch).toBe('子');
