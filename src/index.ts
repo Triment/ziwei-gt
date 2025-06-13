@@ -1,3 +1,4 @@
+import { assert } from 'vitest';
 import { Star, StarType } from './Atom/Star'
 import {EightChar, SolarDay, SolarTime} from 'tyme4ts';
 const GlobalBranch = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
@@ -127,6 +128,7 @@ export class Plate {
     this.setZiweiStars();
     this.setTianfuStars();
     this.setNianStars();
+    this.setMoonStars();
   }
 
   //获取宫位
@@ -336,36 +338,57 @@ export class Plate {
 
   public setMoonStars(){
     //左辅星： 由辰宫起， 顺数生月。 右弼星： 由戌宫起， 逆数生月。例：五月生人，左辅星在申宫，右弼星在午宫
-    let count = GlobalBranch.findIndex(branch => branch === this.eightChar?.getMonth().getEarthBranch().toString());
+    let count = this.birthDay.month - 1;//月份从0开始
     let index = this._palaces.findIndex(palace => palace.stemBranch.branch === '辰');
     index = (index+count )%12;
     this._palaces[index].stars.push({
       name: '左辅',
-      type: StarType.YEAR,
+      type: StarType.MONTH,
     });
     //右弼
     index = this._palaces.findIndex(palace => palace.stemBranch.branch === '戌');
     index = (index+12-count )%12;
     this._palaces[index].stars.push({
       name: '右弼',
-      type: StarType.YEAR,
+      type: StarType.MONTH,
     });
     //天刑星： 由酉宫起， 顺数生月。 天姚星： 由丑宫起， 顺数生月
     index = this._palaces.findIndex(palace => palace.stemBranch.branch === '酉');
     index = (index+count )%12;
     this._palaces[index].stars.push({
       name: '天刑',
-      type: StarType.YEAR,
+      type: StarType.MONTH,
     });
     //天姚
     index = this._palaces.findIndex(palace => palace.stemBranch.branch === '丑');
-    index = (index+12-count )%12;
+    index = (index+count )%12;
+    //console.log(this._palaces[index].stemBranch.branch)
     this._palaces[index].stars.push({
       name: '天姚',
-      type: StarType.YEAR,
+      type: StarType.MONTH,
     });
     //天马星：分年马及月马两种，唯年马仅主驿马之意，而月马主驿马且主财马，故有财马之称。月马以出生月令排布，皆落于寅申巳亥四马之地
-    
+    let tianmaMap: Record<number, string> = {
+      2: '巳',
+      6: '巳',
+      10: '巳',
+      1: '申',
+      5: '申',
+      9: '申',
+      3: '寅',
+      7: '寅',
+      11: '寅',
+      4: '亥',
+      8: '亥',
+      12: '亥'
+    };
+
+    let tianmaBranch = tianmaMap[this.birthDay.month];
+    index = this._palaces.findIndex(palace => palace.stemBranch.branch === tianmaBranch);
+    this._palaces[index].stars.push({
+      name: '天马',
+      type: StarType.MONTH,
+    });
   }
 }
 
