@@ -1,5 +1,6 @@
 export enum StarType {
-  MAIN
+  MAIN,
+  YEAR
 }
 
 

@@ -62,4 +62,30 @@ describe('宫位测试', () => {
         expect(plate.getPalaces()[1].stars.find(star => star.name === '太阳')?.type).toBe(StarType.MAIN);
         expect(plate2.getPalaces()[11].stars.find(star => star.name === '太阳')?.type).toBe(StarType.MAIN);
     })
+    //定位天府
+    it('定位天府', () => {
+        expect(plate.getPalaces()[0].stars.find(star => star.name === '天府')?.type).toBe(StarType.MAIN);
+        expect(plate2.getPalaces()[2].stars.find(star => star.name === '天府')?.type).toBe(StarType.MAIN);
+    })
+    //定位武曲
+    it('定位武曲', () => {
+        expect(plate.getPalaces()[0].stars.find(star => star.name === '武曲')?.type).toBe(StarType.MAIN);
+        expect(plate.getPalaces()[0].stemBranch.stem).toBe('戊');
+        expect(plate.getPalaces()[0].stemBranch.branch).toBe('子');
+        expect(plate2.getPalaces()[10].stars.find(star => star.name === '武曲')?.type).toBe(StarType.MAIN);
+        expect(plate2.getPalaces()[10].stemBranch.stem).toBe('庚');
+        expect(plate2.getPalaces()[10].stemBranch.branch).toBe('戌');
+    })
+
+    it('安年星', () => {
+        expect(plate.getPalaces()[4].stars.find(star => star.name === '红鸾')?.type).toBe(StarType.YEAR);
+        // expect(plate.getPalaces()[4].stemBranch.stem).toBe('庚');
+        // expect(plate.getPalaces()[4].stemBranch.branch).toBe('辰');
+        expect(plate.getPalaces()[10].stars.find(star => star.name === '天喜')?.type).toBe(StarType.YEAR);
+        //console.log(plate2.getPalaces()[2].stars)
+        expect(plate2.getPalaces()[2].stars.find(star => star.name === '红鸾')?.type).toBe(StarType.YEAR);
+        // expect(plate.getPalaces()[4].stemBranch.stem).toBe('庚');
+        // expect(plate.getPalaces()[4].stemBranch.branch).toBe('辰');
+        expect(plate2.getPalaces()[8].stars.find(star => star.name === '天喜')?.type).toBe(StarType.YEAR);
+    })
 });

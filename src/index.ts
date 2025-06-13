@@ -1,5 +1,5 @@
 import { Star, StarType } from './Atom/Star'
-import {SolarDay, SolarTime} from 'tyme4ts';
+import {EightChar, SolarDay, SolarTime} from 'tyme4ts';
 const GlobalBranch = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 const GlobalStem = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
 
@@ -69,6 +69,7 @@ export class Plate {
     minute: 0,
     second: 0
   };//出生时间
+  public eightChar: EightChar | undefined;//八字
   constructor( birthday: Birthday ) {
     //获取农历时间
     let solar = SolarTime.fromYmdHms( birthday.year, birthday.month, birthday.day, birthday.hour, birthday.minute, birthday.second );
@@ -76,6 +77,7 @@ export class Plate {
 
     //获取八字
     let eightChar = lunar.getEightChar();
+    this.eightChar = eightChar;
     // 出生时间
     this.birthDay = {
       year: lunar.getYear(),
@@ -122,7 +124,9 @@ export class Plate {
     this.fateType = deterMine(this._palaces[mainIndex].stemBranch);
 
     //安星
-    this.setZiweiStar();
+    this.setZiweiStars();
+    this.setTianfuStars();
+    this.setNianStars();
   }
 
   //获取宫位
@@ -130,7 +134,7 @@ export class Plate {
     return this._palaces;
   }
 
-  public setZiweiStar() {
+  public setZiweiStars() {
     let ziweiKey = 0;
     if (this.birthDay.day != 0 && 0 === this.birthDay.day % this.fateType) {
       ziweiKey = this.birthDay.day / this.fateType;
@@ -210,6 +214,124 @@ export class Plate {
       }
       index = (index+12-1)%12;//逆行排星
     }
+  }
+  public setTianfuStars() {
+    //定位天府星
+    let ziweiIndex = this._palaces.findIndex(palace => palace.stars.find(star => star.name === '紫微星'));
+    let tianfuMap: Record<number, number> = {
+      2: 2,
+      8: 8,
+      1: 3,
+      0: 4,
+      11: 5,
+      10: 6,
+      9: 7,
+      3: 1,
+      4: 0,
+      5: 11,
+      6: 10,
+      7: 9
+    };
+    let tianfuIndex = tianfuMap[ziweiIndex];
+    //南斗星 顺时针 天府 太阴 贪狼 巨门 天相 天粱 七杀 破军
+    let eightStars = [
+      {
+        name: '天府',
+        type: StarType.MAIN,
+      },
+      {
+        name: '太阴',
+        type: StarType.MAIN,
+      },
+      {
+        name: '贪狼',
+        type: StarType.MAIN,
+      },
+      {
+        name: '巨门',
+        type: StarType.MAIN,
+      },
+      {
+        name: '天相',
+        type: StarType.MAIN,
+      },
+      {
+        name: '天粱',
+        type: StarType.MAIN,
+      },
+      {
+        name: '七杀',
+        type: StarType.MAIN,
+      },,,,
+      {
+        name: '破军',
+        type: StarType.MAIN,
+      },
+    ];
+    for (const star of eightStars) {
+      if(star){
+        this._palaces[tianfuIndex].stars.push(star);
+      }
+      tianfuIndex = (tianfuIndex+1)%12;
+    }
+  }
+
+  //安年星
+  public setNianStars(){
+    let stem = this.eightChar!.getYear().getHeavenStem().toString();
+    let index = this._palaces.findIndex(palace => palace.stemBranch.stem === stem)!;
+    this._palaces[index].stars.push({
+      name: '安年',
+      type: StarType.YEAR,
+    });
+    index = (index+12-1)%12;
+    this._palaces[index].stars.push({
+      name: '陀螺',
+      type: StarType.YEAR,
+    });
+    index = (index+12+2)%12;
+    this._palaces[index].stars.push({
+      name: '擎羊',
+      type: StarType.YEAR,
+    });
+    //安天魁星、天钺星
+    let kuiYueMap: Record<string, string[]> = {
+      '甲': ['丑', '未'],
+      '戊': ['丑', '未'],
+      '庚': ['丑', '未'],
+      '乙': ['子', '申'],
+      '己': ['子', '申'],
+      '丙': ['亥', '酉'],
+      '丁': ['亥', '酉'],
+      '辛': ['午', '寅'],
+      '壬': ['卯', '巳'],
+      '癸': ['卯', '巳'],
+    };
+    this._palaces.find(palace => palace.stemBranch.branch === kuiYueMap[stem][0])!.stars.push({
+      name: '天钺',
+      type: StarType.YEAR,
+    });
+    this._palaces.find(palace => palace.stemBranch.branch === kuiYueMap[stem][1])!.stars.push({
+      name: '天魁',
+      type: StarType.YEAR,
+    });
+
+    //红鸾天喜
+    //获取卯宫位置(index+12-1)%12
+    index = this._palaces.findIndex(palace => palace.stemBranch.branch === '卯');
+    const count = GlobalBranch.findIndex(branch => branch === this.eightChar?.getYear().getEarthBranch().toString());//年支的索引
+    //console.log(count)
+    index = (index+12-count )%12;
+    this._palaces[index].stars.push({
+      name: '红鸾',
+      type: StarType.YEAR,
+    });
+    //天喜
+    index = (index+12+6)%12;//天喜在对宫
+    this._palaces[index].stars.push({
+      name: '天喜',
+      type: StarType.YEAR,
+    });
   }
 }
 
