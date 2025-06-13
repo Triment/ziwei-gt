@@ -97,7 +97,6 @@ export class Plate {
           stem: '',
           branch: branch
         },
-        isOrigin: branch === yearStem, //是否来因宫
         stars: []
       })
     });//初始化宫位
@@ -105,6 +104,9 @@ export class Plate {
     let position = GlobalStem.indexOf(positionStem( yearStem )!);//起宫干的索引
     for ( let i = 0; i < 12; i++ ) {
       this._palaces[(i+3)%12].stemBranch.stem = GlobalStem[position%10];//卯宫开始安宫干
+      if (GlobalStem[position%10] === yearStem) {
+        this._palaces[(i+3)%12].isOrigin = true;//来因宫
+      }
       position++;
     }
     //定阴阳
@@ -129,6 +131,7 @@ export class Plate {
     this.setTianfuStars();
     this.setNianStars();
     this.setMoonStars();
+    this.setHourStars();
   }
 
   //获取宫位
@@ -390,6 +393,85 @@ export class Plate {
       type: StarType.MONTH,
     });
   }
+
+  public setHourStars() {
+    //文昌：由戌宫起，逆数出生时辰
+//文曲：由辰宫起，顺数出生时辰
+    let count = GlobalBranch.findIndex(branch => branch === this.eightChar?.getHour().getEarthBranch().toString());
+    let index = this._palaces.findIndex(palace => palace.stemBranch.branch === '戌');
+    index = (index+12-count )%12;
+    this._palaces[index].stars.push({
+      name: '文昌',
+      type: StarType.HOUR,
+    });
+    //文曲
+    index = this._palaces.findIndex(palace => palace.stemBranch.branch === '辰');
+    index = (index+count )%12;
+    this._palaces[index].stars.push({
+      name: '文曲',
+      type: StarType.HOUR,
+    });
+    //安火星：依生年支与生时顺排
+    /**
+     * ①寅午戌年生人，由丑宫起，顺数生时。
+②申子辰年生人，由寅宫起，顺数生时。
+③巳酉丑年生人，由卯宫起，顺数生时。
+④亥卯未年生人，由酉宫起，顺数生时。
+     */
+    let huoMap: Record<string, string> = {
+      '寅': '丑',
+      '午': '丑',
+      '戌': '丑',
+      '申': '寅',
+      '子': '寅',
+      '辰': '寅',
+      '巳': '卯',
+      '酉': '卯',
+      '丑': '卯',
+      '亥': '酉',
+      '未': '酉',
+    };
+    let huoBranch = huoMap[this.eightChar!.getYear().getEarthBranch().toString()];
+    index = this._palaces.findIndex(palace => palace.stemBranch.branch === huoBranch);
+    let hour = this.eightChar!.getHour().getEarthBranch().toString();
+    let hourIndex = GlobalBranch.findIndex(branch => branch === hour);
+    index = (index+hourIndex )%12;
+    this._palaces[index].stars.push({
+      name: '火星',
+      type: StarType.HOUR,
+    });
+    //安铃星：由寅宫起，顺数生时
+    /**
+     * 安铃星：依生年支与生时顺排，分二组如下：
+①寅午戌年生人，由卯宫起，顺数生时。
+②其他年生人，皆由戌宫起，顺数生时。
+     */
+    let lingMap: Record<string, string> = {
+      '寅': '卯',
+      '午': '卯',
+      '戌': '卯',
+      '申': '戌',
+      '子': '戌',
+      '辰': '戌',
+      '巳': '戌',
+      '酉': '戌',
+      '丑': '戌',
+      '亥': '戌',
+      '未': '戌',
+      '卯': '戌',
+    };
+    let lingBranch = lingMap[this.eightChar!.getYear().getEarthBranch().toString()];
+    index = this._palaces.findIndex(palace => palace.stemBranch.branch === lingBranch);
+    hourIndex = GlobalBranch.findIndex(branch => branch === hour);
+    index = (index+hourIndex )%12;
+    this._palaces[index].stars.push({
+      name: '铃星',
+      type: StarType.HOUR,
+    });
+  }
+
+  //四化
+  
 }
 
 
