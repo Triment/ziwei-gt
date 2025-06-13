@@ -333,7 +333,42 @@ export class Plate {
       type: StarType.YEAR,
     });
   }
+
+  public setMoonStars(){
+    //左辅星： 由辰宫起， 顺数生月。 右弼星： 由戌宫起， 逆数生月。例：五月生人，左辅星在申宫，右弼星在午宫
+    let count = GlobalBranch.findIndex(branch => branch === this.eightChar?.getMonth().getEarthBranch().toString());
+    let index = this._palaces.findIndex(palace => palace.stemBranch.branch === '辰');
+    index = (index+count )%12;
+    this._palaces[index].stars.push({
+      name: '左辅',
+      type: StarType.YEAR,
+    });
+    //右弼
+    index = this._palaces.findIndex(palace => palace.stemBranch.branch === '戌');
+    index = (index+12-count )%12;
+    this._palaces[index].stars.push({
+      name: '右弼',
+      type: StarType.YEAR,
+    });
+    //天刑星： 由酉宫起， 顺数生月。 天姚星： 由丑宫起， 顺数生月
+    index = this._palaces.findIndex(palace => palace.stemBranch.branch === '酉');
+    index = (index+count )%12;
+    this._palaces[index].stars.push({
+      name: '天刑',
+      type: StarType.YEAR,
+    });
+    //天姚
+    index = this._palaces.findIndex(palace => palace.stemBranch.branch === '丑');
+    index = (index+12-count )%12;
+    this._palaces[index].stars.push({
+      name: '天姚',
+      type: StarType.YEAR,
+    });
+    //天马星：分年马及月马两种，唯年马仅主驿马之意，而月马主驿马且主财马，故有财马之称。月马以出生月令排布，皆落于寅申巳亥四马之地
+    
+  }
 }
+
 
 //掌心决定五行局
 function deterMine( stemBranch: StemBranch ): FateNum {
