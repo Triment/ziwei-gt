@@ -1,4 +1,4 @@
-enum StarType {
+export enum StarType {
   MAIN
 }
 

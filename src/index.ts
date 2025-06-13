@@ -1,4 +1,4 @@
-import { Star } from './Atom/Star'
+import { Star, StarType } from './Atom/Star'
 import {SolarDay, SolarTime} from 'tyme4ts';
 const GlobalBranch = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
 const GlobalStem = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
@@ -38,7 +38,7 @@ interface Palace {
   isBody?: boolean;//是否为身宫
   isOrigin?: boolean;//是否为来因宫
   duty?: string;//本命宫位职责
-  
+  stars: Star[];
 }
 
 export enum FateNum {
@@ -61,6 +61,14 @@ export class Plate {
   private _palaces: Palace[] = [];//宫位
   public yinYang: boolean = false;//阴阳
   public fateType: FateNum = FateNum.Soil;//命数,命局
+  public birthDay: Birthday = {
+    year: 0,
+    month: 0,
+    day: 0,
+    hour: 0,
+    minute: 0,
+    second: 0
+  };//出生时间
   constructor( birthday: Birthday ) {
     //获取农历时间
     let solar = SolarTime.fromYmdHms( birthday.year, birthday.month, birthday.day, birthday.hour, birthday.minute, birthday.second );
@@ -68,7 +76,15 @@ export class Plate {
 
     //获取八字
     let eightChar = lunar.getEightChar();
-
+    // 出生时间
+    this.birthDay = {
+      year: lunar.getYear(),
+      month: lunar.getMonth(),
+      day: lunar.getDay(),
+      hour: lunar.getHour(),
+      minute: lunar.getMinute(),
+      second: lunar.getSecond()
+    }
     let yearStem = eightChar.getYear().getHeavenStem().toString();//年干
     let monthlyBranch = eightChar.getMonth().getEarthBranch().toString();//月支
     let hourBranch = eightChar.getHour().getEarthBranch().toString();//时支
@@ -78,7 +94,8 @@ export class Plate {
           stem: '',
           branch: branch
         },
-        isOrigin: branch === yearStem //是否来因宫
+        isOrigin: branch === yearStem, //是否来因宫
+        stars: []
       })
     });//初始化宫位
     //定12宫干
@@ -103,6 +120,9 @@ export class Plate {
 
     //掌心决定五行局
     this.fateType = deterMine(this._palaces[mainIndex].stemBranch);
+
+    //安星
+    this.setZiweiStar();
   }
 
   //获取宫位
@@ -111,7 +131,85 @@ export class Plate {
   }
 
   public setZiweiStar() {
-    
+    let ziweiKey = 0;
+    if (this.birthDay.day != 0 && 0 === this.birthDay.day % this.fateType) {
+      ziweiKey = this.birthDay.day / this.fateType;
+    } else if (this.birthDay.day != 0 && 0 !== this.birthDay.day % this.fateType) {
+      let result = (Math.floor(this.birthDay.day / this.fateType) + 1) * this.fateType - this.birthDay.day;// frac{生日+x}{局数} = 商 // x = 商*局-生日
+      if (result % 2 === 0) {
+        ziweiKey = result + Math.floor(this.birthDay.day / this.fateType) + 1;
+      } else {
+        ziweiKey = Math.floor(this.birthDay.day / this.fateType) + 1 - result;
+      }
+    }
+    type ZiweiKey =
+  | '-8' | '-7' | '-6' | '-5' | '-4' | '-3' | '-2' | '-1'
+  | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' | '10' | '11' | '12' | '13' | '14' | '15';
+
+    const ziweiMap: Record<ZiweiKey, number> = {
+      '-1': 0,
+      '11': 0,
+      '0': 1,
+      '12': 1,
+      '1': 2,
+      '13': 2,
+      '2': 3,
+      '14': 3,
+      '3': 4,
+      '15': 4,
+      '4': 5,
+      '-8': 5,
+      '5': 6,
+      '-7': 6,
+      '6': 7,
+      '-6': 7,
+      '7': 8,
+      '-5': 8,
+      '8': 9,
+      '-4': 9,
+      '9': 10,
+      '-3': 10,
+      '10': 11,
+      '-2': 11,
+    };
+
+    let index: number = ziweiMap[ziweiKey.toString() as ZiweiKey];//紫微星的索引
+    //逆行排六主星
+    let sixStars: (Star|undefined)[] = [
+      {
+        name: '紫微星',
+        type: StarType.MAIN,
+      },
+      {
+        name: '天机',
+        type: StarType.MAIN,
+      }//紫微天机逆行旁
+      ,,//隔一阳武天同当
+      {
+        name: '太阳',
+        type: StarType.MAIN,
+      },
+      {
+        name: '武曲',
+        type: StarType.MAIN,
+      },
+      {
+        name: '天同',
+        type: StarType.MAIN,
+      },
+      ,,,//又隔二位廉贞地
+      {
+        name: '廉贞',
+        type: StarType.MAIN,
+      }
+    ];
+
+    for(const star of sixStars){
+      if(star){
+        this._palaces[index].stars.push(star);
+      }
+      index = (index+12-1)%12;//逆行排星
+    }
   }
 }
 

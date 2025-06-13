@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Plate, FateNum, Birthday } from './index'
+import { StarType } from './Atom/Star';
 describe('宫位测试', () => {
     const birthday: Birthday = {
         year: 1995,
@@ -46,5 +47,19 @@ describe('宫位测试', () => {
     it('五行局', () => {
         expect(plate.fateType).toBe(FateNum.Gold);//金盘
         expect(plate2.fateType).toBe(FateNum.Soil)//土盘
+    })
+
+    it('定位紫微星', () => {
+        expect(plate.getPalaces()[4].stars.find(star => star.name === '紫微星')?.type).toBe(StarType.MAIN);
+        expect(plate2.getPalaces()[2].stars.find(star => star.name === '紫微星')?.type).toBe(StarType.MAIN);
+    })
+    it('定位天机', () => {
+        expect(plate.getPalaces()[3].stars.find(star => star.name === '天机')?.type).toBe(StarType.MAIN);
+        expect(plate2.getPalaces()[1].stars.find(star => star.name === '天机')?.type).toBe(StarType.MAIN);
+    })
+    //定位太阳
+    it('定位太阳', () => {
+        expect(plate.getPalaces()[1].stars.find(star => star.name === '太阳')?.type).toBe(StarType.MAIN);
+        expect(plate2.getPalaces()[11].stars.find(star => star.name === '太阳')?.type).toBe(StarType.MAIN);
     })
 });
