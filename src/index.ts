@@ -188,7 +188,7 @@ export class Plate {
     //逆行排六主星
     let sixStars: (Star|undefined)[] = [
       {
-        name: '紫微星',
+        name: '紫微',
         type: StarType.MAIN,
       },
       {
