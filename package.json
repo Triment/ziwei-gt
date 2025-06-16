@@ -4,11 +4,13 @@
   "description": "",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
+  "browser": "dist/index.global.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "browser": "./dist/index.global.js",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "files": [

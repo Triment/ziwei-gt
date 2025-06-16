@@ -26,6 +26,7 @@ export type Birthday = {
   hour: number;
   minute: number;
   second: number;
+  sex: 0|1;
 }
 // 干支
 type StemBranch = {
@@ -68,7 +69,8 @@ export class Plate {
     day: 0,
     hour: 0,
     minute: 0,
-    second: 0
+    second: 0,
+    sex: 0
   };//出生时间
   public eightChar: EightChar | undefined;//八字
   constructor( birthday: Birthday ) {
@@ -86,7 +88,8 @@ export class Plate {
       day: lunar.getDay(),
       hour: lunar.getHour(),
       minute: lunar.getMinute(),
-      second: lunar.getSecond()
+      second: lunar.getSecond(),
+      sex: birthday.sex
     }
     let yearStem = eightChar.getYear().getHeavenStem().toString();//年干
     let monthlyBranch = eightChar.getMonth().getEarthBranch().toString();//月支
