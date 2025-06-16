@@ -305,7 +305,7 @@ export class Plate {
     });
     index = (index+12-1)%12;
     this._palaces[index].stars.push({
-      name: '禄存',
+      name: '陀罗',
       type: StarType.YEAR,
     });
     index = (index+12+2)%12;
