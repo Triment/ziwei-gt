@@ -56,8 +56,8 @@ describe('宫位测试', () => {
     })
 
     it('定位紫微星', () => {
-        expect(plate.getPalaces()[4].stars.find(star => star.name === '紫微星')?.type).toBe(StarType.MAIN);
-        expect(plate2.getPalaces()[2].stars.find(star => star.name === '紫微星')?.type).toBe(StarType.MAIN);
+        expect(plate.getPalaces()[4].stars.find(star => star.name === '紫微')?.type).toBe(StarType.MAIN);
+        expect(plate2.getPalaces()[2].stars.find(star => star.name === '紫微')?.type).toBe(StarType.MAIN);
     })
     it('定位天机', () => {
         expect(plate.getPalaces()[3].stars.find(star => star.name === '天机')?.type).toBe(StarType.MAIN);

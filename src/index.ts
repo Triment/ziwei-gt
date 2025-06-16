@@ -224,7 +224,7 @@ export class Plate {
   }
   public setTianfuStars() {
     //定位天府星
-    let ziweiIndex = this._palaces.findIndex(palace => palace.stars.find(star => star.name === '紫微星'));
+    let ziweiIndex = this._palaces.findIndex(palace => palace.stars.find(star => star.name === '紫微'));
     let tianfuMap: Record<number, number> = {
       2: 2,
       8: 8,
