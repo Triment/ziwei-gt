@@ -263,7 +263,7 @@ export class Plate {
         type: StarType.MAIN,
       },
       {
-        name: '天粱',
+        name: '天梁',
         type: StarType.MAIN,
       },
       {
