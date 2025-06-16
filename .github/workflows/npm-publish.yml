@@ -4,10 +4,8 @@ on:
   release:
     types: [created]
   push:
-    tags:
-      - 'v*'
-    branches:
-      - main
+    branches: [ "master" ]  # 主分支提交时触发
+    tags: [ "v*" ] 
     workflow_dispatch:
 jobs:
   build:
