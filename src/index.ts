@@ -208,7 +208,7 @@ export class Plate {
         name: '天同',
         type: StarType.MAIN,
       },
-      ,,,//又隔二位廉贞地
+      ,,//又隔二位廉贞地
       {
         name: '廉贞',
         type: StarType.MAIN,
@@ -327,11 +327,11 @@ export class Plate {
       '癸': ['卯', '巳'],
     };
     this._palaces.find(palace => palace.stemBranch.branch === kuiYueMap[stem][0])!.stars.push({
-      name: '天钺',
+      name: '天魁',
       type: StarType.YEAR,
     });
     this._palaces.find(palace => palace.stemBranch.branch === kuiYueMap[stem][1])!.stars.push({
-      name: '天魁',
+      name: '天钺',
       type: StarType.YEAR,
     });
 
