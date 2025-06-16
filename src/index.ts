@@ -120,9 +120,8 @@ export class Plate {
     let bodyIndex = (GlobalBranch.indexOf(monthlyBranch) + GlobalBranch.indexOf(hourBranch))%12;
     this._palaces[mainIndex].isMain = true;//命宫
     this._palaces[bodyIndex].isBody = true;//身宫
-
     //逆时针定宫职
-    for ( let i = 12; i > 1; i-- ) {
+    for ( let i = 12; i >= 1; i-- ) {
       this._palaces[(i+mainIndex)%12].duty = GLOBAL_DUTYS[12-i];
     }
 

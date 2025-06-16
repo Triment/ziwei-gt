@@ -8,7 +8,8 @@ describe('宫位测试', () => {
         day: 3,
         hour: 12,
         minute: 45,
-        second: 0
+        second: 0,
+        sex: 0
     };
     let plate = new Plate(birthday);
     //另起一个盘
@@ -18,7 +19,8 @@ describe('宫位测试', () => {
         day: 16,
         hour: 5,
         minute: 44,
-        second: 0
+        second: 0,
+        sex: 0
     };
     let plate2 = new Plate(birthday2);
     it('八字安宫', () => {
@@ -38,11 +40,15 @@ describe('宫位测试', () => {
         expect(plate.getPalaces()[1].duty).toBe('财帛');
         expect(plate.getPalaces()[2].duty).toBe('子女');
         expect(plate.getPalaces()[3].duty).toBe('夫妻');
+        expect(plate.getPalaces()[6].duty).toBe('父母');
+
 
         expect(plate2.getPalaces()[0].duty).toBe('官禄');
         expect(plate2.getPalaces()[1].duty).toBe('交友');
         expect(plate2.getPalaces()[2].duty).toBe('迁移');
         expect(plate2.getPalaces()[3].duty).toBe('疾厄');
+        expect(plate2.getPalaces()[9].duty).toBe('父母');
+
     })
     it('五行局', () => {
         expect(plate.fateType).toBe(FateNum.Gold);//金盘
