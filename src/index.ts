@@ -106,9 +106,9 @@ export class Plate {
     //定12宫干
     let position = GlobalStem.indexOf(positionStem( yearStem )!);//起宫干的索引
     for ( let i = 0; i < 12; i++ ) {
-      this._palaces[(i+3)%12].stemBranch.stem = GlobalStem[position%10];//卯宫开始安宫干
+      this._palaces[(i+2)%12].stemBranch.stem = GlobalStem[position%10];//卯宫开始安宫干
       if (GlobalStem[position%10] === yearStem) {
-        this._palaces[(i+3)%12].isOrigin = true;//来因宫
+        this._palaces[(i+2)%12].isOrigin = true;//来因宫
       }
       position++;
     }
@@ -504,7 +504,7 @@ function deterMine( stemBranch: StemBranch ): FateNum {
 
 //函数用于定位十二宫干
 function positionStem( yearStem: string ): string | undefined {
-  const _stems = [ '丁', '己', '辛', '癸','乙' ];
+  const _stems = [ '丙', '戊', '庚', '壬', '甲' ];
   for ( let i = 0; i < 5; i++ ) {
     if ([GlobalStem[i], GlobalStem[i + 5]].includes( yearStem )) {
       return _stems[i];
