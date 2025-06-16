@@ -88,11 +88,13 @@ describe('宫位测试', () => {
         // expect(plate.getPalaces()[4].stemBranch.stem).toBe('庚');
         // expect(plate.getPalaces()[4].stemBranch.branch).toBe('辰');
         expect(plate.getPalaces()[10].stars.find(star => star.name === '天喜')?.type).toBe(StarType.YEAR);
+        expect(plate.getPalaces()[3].stars.find(star => star.name === '禄存')?.type).toBe(StarType.YEAR);
         //console.log(plate2.getPalaces()[2].stars)
         expect(plate2.getPalaces()[2].stars.find(star => star.name === '红鸾')?.type).toBe(StarType.YEAR);
         // expect(plate.getPalaces()[4].stemBranch.stem).toBe('庚');
         // expect(plate.getPalaces()[4].stemBranch.branch).toBe('辰');
         expect(plate2.getPalaces()[8].stars.find(star => star.name === '天喜')?.type).toBe(StarType.YEAR);
+        expect(plate2.getPalaces()[6].stars.find(star => star.name === '禄存')?.type).toBe(StarType.YEAR);
     })
     it('定位月星', () => {
         expect(plate.getPalaces()[1].stars.find(star => star.name === '左辅')?.type).toBe(StarType.MONTH);

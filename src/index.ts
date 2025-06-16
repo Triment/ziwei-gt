@@ -286,14 +286,26 @@ export class Plate {
   //安年星
   public setNianStars(){
     let stem = this.eightChar!.getYear().getHeavenStem().toString();
-    let index = this._palaces.findIndex(palace => palace.stemBranch.stem === stem)!;
+    const nianMap: Record<string, number> = {
+      '甲': 2,
+      '戊': 5,
+      '乙': 3,
+      '己': 6,
+      '丙': 5,
+      '庚': 8,
+      '丁': 6,
+      '辛': 9,
+      '壬': 11,
+      '癸': 0
+    }
+    let index = nianMap[stem];
     this._palaces[index].stars.push({
-      name: '安年',
+      name: '禄存',
       type: StarType.YEAR,
     });
     index = (index+12-1)%12;
     this._palaces[index].stars.push({
-      name: '陀螺',
+      name: '禄存',
       type: StarType.YEAR,
     });
     index = (index+12+2)%12;
