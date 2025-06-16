@@ -1,8 +1,14 @@
 export enum StarType {
   MAIN,
-  YEAR
+  YEAR,
+  MONTH,
+  HOUR
 }
 
+enum StarChangeType {
+  INNER,
+  OUTER
+}
 
 export type Star = {
   name: string;
