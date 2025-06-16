@@ -5,7 +5,7 @@ export default defineConfig({
   format: ['esm', 'cjs', 'iife'],
   dts: true,
   clean: true,
-  globalName: 'ZiweiGT',
+  globalName: 'Ziwei',
   minify: true,
   sourcemap: true,
 });

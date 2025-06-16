@@ -14,13 +14,17 @@ npm install ziwei-gt
 
 ```typescript
 // ESM
-import { capitalize, reverse } from 'ziwei-gt';
-
-// CommonJS
-const { capitalize, reverse } = require('ziwei-gt');
-
-console.log(capitalize('hello')); // 输出: Hello
-console.log(reverse('hello')); // 输出: olleh
+import { Plate } from 'ziwei'
+const plate = new Plate({
+  year: 2023,
+  month: 1,
+  day: 1,
+  hour: 0,
+  minute: 0,
+  second: 0,
+  sex: 0
+});
+console.log(plate.getPalaces());
 ```
 
 ### 浏览器环境
@@ -28,12 +32,18 @@ console.log(reverse('hello')); // 输出: olleh
 直接通过 script 标签引入：
 
 ```html
-<script src="node_modules/ziwei-gt/dist/index.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ziwei@0.0.2/dist/index.global.js"></script>
 <script>
   // 通过全局变量 ZiweiGT 访问
-  console.log(ZiweiGT.capitalize('hello')); // 输出: Hello
-  console.log(ZiweiGT.reverse('hello')); // 输出: olleh
-</script>
+  console.log(new Ziwei.Plate({
+    year: 2023,
+    month: 1,
+    day: 1,
+    hour: 0,
+    minute: 0,
+    second: 0,
+    sex: 0
+  })); 
 ```
 
 或者使用 CDN：
